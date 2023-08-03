@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  scylla:
+    image: scylladb/scylla:latest
+    ports:
+      - "9042:9042"  # CQL native protocol
+      - "9160:9160"  # Thrift legacy protocol
+      - "7000:7000"  # Inter-node communication
+      - "7001:7001"  # Inter-node TLS communication
+      - "7199:7199"  # JMX (optional)
+    volumes:
+      - ./scylla-data:/var/lib/scylla
+    environment:
+      - SCYLLA_USERNAME=myuser
+      - SCYLLA_PASSWORD=mypassword
+      - SCYLLA_DC=datacenter1
+
+    restart: unless-stopped
+
+volumes:
+  scylla-data:
