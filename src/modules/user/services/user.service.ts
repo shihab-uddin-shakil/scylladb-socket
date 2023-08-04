@@ -28,11 +28,12 @@ export class UserService {
   async createUser(user: User) {
     try {
       await this.userRepository.createUser(user);
-      const d = {
-        name: 'hamid',
-        reason: 'test',
-        res: 'Passed',
-      };
+      // const d = {
+      //   name: 'hamid',
+      //   reason: 'test',
+      //   res: 'Passed',
+      // };
+      const d = await this.getUsers();
       const data = await this.notificationService.emitOnlineMembers(d);
       console.log(data);
       return user;
