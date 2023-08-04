@@ -11,15 +11,17 @@ import {
 // import { SignInOutService } from '@src/modules/signInOut/signInOut.service';
 import { Server, Socket } from 'socket.io';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
+import { UserService } from 'src/modules/user/services/user.service';
 
 @Injectable()
 @WebSocketGateway({ cors: true })
 export class EventsGateway
   implements OnModuleInit, OnGatewayConnection, OnGatewayDisconnect
 {
-  constructor() // @Inject(forwardRef(() => SignInOutService))
-  // private readonly signInOutService: SignInOutService
-  {}
+  constructor(
+    @Inject(forwardRef(() => UserService))
+    private readonly userService: UserService, // @Inject(forwardRef(() => SignInOutService)) // private readonly signInOutService: SignInOutService
+  ) {}
 
   @WebSocketServer()
   server: Server;
@@ -60,11 +62,12 @@ export class EventsGateway
     // );
     // socket.send(data);
     // console.log('ssssssssssss ', socket.handshake.auth);
-    const data = {
-      name: 'hamid',
-      reason: 'test',
-      res: 'Passed',
-    };
+    // const data = {
+    //   name: 'hamid',
+    //   reason: 'test',
+    //   res: 'Passed',
+    // };
+    const data = await this.userService.getUsers();
     this.server.to(socket.id).emit('onlineMembers', {
       name: 'list of online members',
       content: data,
